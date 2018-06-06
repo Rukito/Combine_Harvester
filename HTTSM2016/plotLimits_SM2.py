@@ -105,7 +105,7 @@ if args.auto_style is not None:
 for src in args.input:
     splitsrc = src.split(':')
     file = splitsrc[0]
-    # limit.json => Draw as full obs + exp limit band
+    #limit.json => Draw as full obs + exp limit band	
     if len(splitsrc) == 1:
         graph_sets.append(plot.StandardLimitsFromJSONFile(file, args.show.split(',')))
         if axis is None:
@@ -190,10 +190,10 @@ if legend.GetNRows() == 1:
     legend.SetY1(legend.GetY2() - 0.5*(legend.GetY2()-legend.GetY1()))
 legend.Draw()
 
-# line = ROOT.TLine()
-# line.SetLineColor(ROOT.kBlue)
-# line.SetLineWidth(2)
-# plot.DrawHorizontalLine(pads[0], line, 1)
+#line = ROOT.TLine()
+#line.SetLineColor(ROOT.kBlue)
+#line.SetLineWidth(2)
+#plot.DrawHorizontalLine(pads[0], line, 1)
 
 box = ROOT.TPave(pads[0].GetLeftMargin(), 0.81, 1-pads[0].GetRightMargin(), 1-pads[0].GetTopMargin(), 1, 'NDC')
 box.Draw()

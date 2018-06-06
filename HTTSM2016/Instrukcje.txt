@@ -1,0 +1,17 @@
+MorphingSM2016 --output_folder="Analysis2017" --postfix="-2D" --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=false 
+cd output/Analysis2017
+combineTool.py -M T2W -i {cmb,mt,tt}/* -o workspace.root --parallel 8
+combineTool.py -M Asymptotic -d */*/workspace.root --there -n .limit --parallel 8 
+combineTool.py -M CollectLimits */*/*.limit.* --use-dirs -o limits.json
+python ../../plotLimits_SM2.py limits_{cmb,mt,tt}.json:exp0 --auto-style --cms-sub Preliminary -o lim_compare 
+python ../../plotLimits_SM2.py limits_cmb.json --auto-style --cms-sub Preliminary -o lim_expected_cmb 
+python ../../plotLimits_SM2.py limits_tt.json --auto-style --cms-sub Preliminary -o lim_expected_tt 
+python ../../plotLimits_SM2.py limits_mt.json --auto-style --cms-sub Preliminary -o lim_expected_mt
+combine -M MaxLikelihoodFit cmb/125/workspace.root --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --rMin 0.5 --rMax 1.5 --expectSignal=1
+combine -M ProfileLikelihood --significance cmb/125/workspace.root --expectSignal=1
+PostFitShapes -o postfit_shapes.root -m 125 -f mlfit.root:fit_s --postfit --sampling --print -d cmb/125/combined.txt.cmb
+mkdir fig_png 
+root -b ../../plotPostFit.C
+
+python ../../../../HiggsAnalysis/CombinedLimit/test/diffNuisances.py mlfit.root -A -a --stol 0.99 --stol 0.99 --vtol 99. --vtol2 99. -f text mlfit.root > mlfit.txt
+
