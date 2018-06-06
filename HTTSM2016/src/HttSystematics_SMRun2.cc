@@ -1386,8 +1386,8 @@ namespace ch {
         //##############################################################################
         
         //   Diboson  Normalisation - fully correlated
-        cb.cp().process({"VV","VVT","VVJ","VVJ_rest"}).AddSyst(cb,
-                                        "CMS_htt_vvXsec_13TeV", "lnN", SystMap<>::init(1.05));
+//        cb.cp().process({"VV","VVT","VVJ","VVJ_rest"}).AddSyst(cb,
+//                                        /*"CMS_htt_vvXsec_13TeV"*/, "lnN", SystMap<>::init(1.05));
         if (! ttbar_fit){
         //   ttbar Normalisation - fully correlated
 	    cb.cp().process({"TT","TTT","TTJ","TTJ_rest"}).AddSyst(cb,

@@ -100,9 +100,36 @@ def compareTTcr(file1, file2):
 def compare(fileName):
 	file1 = TFile("shapes/"+folder1+"/"+fileName)
 	file2 = TFile("shapes/"+folder2+"/"+fileName)
-	compareMainCategories(file1, file2)
+	#compareMainCategories(file1, file2)
 	compareMTcr(file1, file2) if fileName.count("mt")>0 else compareTTcr(file1, file2)
+	compareUP_DOWN(file1, file2)
 	
+def compareUP_DOWN(file1, file2):
+	channel = "mt_" if file1.GetName().count("htt_mt")>0 else "tt_"
+	dirKeys = file1.GetListOfKeys()
+	dirKey = dirKeys.First()
+	while dirKey != None:
+		dirKey.Print()
+		directory = dirKey.ReadObj()
+		dirKey = dirKeys.After(dirKey)
+		if directory.GetName().count("_cr")>0:
+			continue
+		histoKeys = directory.GetListOfKeys()
+		histoKey = histoKeys.First()
+		while histoKey != None:
+			histo1 = histoKey.ReadObj()
+			histoKey = histoKeys.After(histoKey)
+			#if (histo1.GetName().count("Up") or histo1.GetName().count("Down")) and histo1.GetName().count("CMS_scale_t")==0:
+				#continue
+			histo2 = getHisto(file2, directory.GetName(), histo1.GetName())
+			if histo2 == None:
+				continue
+			print histo2
+			histoDiff = histo1.Clone()
+			histoDiff.Add(histo2, -1)
+			#saveHisto(histoDiff, directory.GetName())
+			save2histos(histo1, histo2, directory.GetName())
+
 for cat in mainCategories:
 	os.mkdir(folder1+"_"+folder2+"/mt_"+cat)
 	os.mkdir(folder1+"_"+folder2+"/tt_"+cat)
